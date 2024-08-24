@@ -2,6 +2,7 @@
 export interface SizeOptions {
 	type: 'fixed' | 'dynamic';
 	ratio?: number; 	// the ratio to which to split the remaining width across dynamic items
+	size?: number;		// size for fixed sized panels
 	minSize?: number;	// minSize, idealSize will be set to this, actual width depends on 'squeeze' method
 }
 
@@ -32,7 +33,7 @@ export class SizeItem {
 		public readonly options: SizeOptions
 	) { }
 
-	public setIdealSize(size: number): SizeItem  {
+	public setIdealSize(size: number): SizeItem {
 		this._idealSize = Math.max(this.minSize, size);
 		return this;
 	}
@@ -60,6 +61,11 @@ export class DistributedSize {
 	public calculate(size: number) {
 		let remainingSize = size;
 		// subtract fixed size
+		this._fixedItems.forEach(item => {
+			const size = item.options.size || 0;
+			item.setIdealSize(size);
+			remainingSize -= size;
+		});
 		this.distributeDynamics(remainingSize);
 	}
 	private distributeDynamics(size: number) {

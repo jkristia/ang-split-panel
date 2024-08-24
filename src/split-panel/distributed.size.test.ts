@@ -74,4 +74,19 @@ describe('calculate size', () => {
 		expect(size.items[1].idealSize).toBeCloseTo(30, 3);
 		expect(size.items[2].idealSize).toBeCloseTo(30, 3);
 	})
+	it('fixed + dyn size, no min', () => {
+		const size = new DistributedSize().setItems([
+			new SizeItem({ type: 'fixed', size: 100 }),
+			new SizeItem({ type: 'dynamic', ratio: 75 }),
+			new SizeItem({ type: 'dynamic', ratio: 25 }),
+		]);
+		size.calculate(200);
+		expect(size.items[0].idealSize).toBe(100);
+		expect(size.items[1].idealSize).toBe(75);
+		expect(size.items[2].idealSize).toBe(25);
+		size.calculate(110);
+		expect(size.items[0].idealSize).toBe(100);
+		expect(size.items[1].idealSize).toBe(7.5);
+		expect(size.items[2].idealSize).toBe(2.5);
+	})
 })
