@@ -5,7 +5,7 @@ export interface SizeOptions {
 	minSize?: number;	// minSize, idealSize will be set to this, actual width depends on 'squeeze' method
 }
 
-export class DistributedItem {
+export class SizeItem {
 	private _idealSize: number = 0;
 	public get ratio(): number {
 		if (this.options.type === 'fixed') {
@@ -32,7 +32,7 @@ export class DistributedItem {
 		public readonly options: SizeOptions
 	) { }
 
-	public setIdealSize(size: number): DistributedItem  {
+	public setIdealSize(size: number): SizeItem  {
 		this._idealSize = Math.max(this.minSize, size);
 		return this;
 	}
@@ -44,14 +44,14 @@ export class DistributedItem {
 export class DistributedSize {
 
 	// squeeze = 'fit_to_size' | 'min_size'
-	private _items: DistributedItem[] = [];
-	private _fixedItems: DistributedItem[] = [];
-	private _dynamicItems: DistributedItem[] = [];
-	public get items(): DistributedItem[] {
+	private _items: SizeItem[] = [];
+	private _fixedItems: SizeItem[] = [];
+	private _dynamicItems: SizeItem[] = [];
+	public get items(): SizeItem[] {
 		return this._items;
 	}
 
-	public setItems(items: DistributedItem[]): DistributedSize {
+	public setItems(items: SizeItem[]): DistributedSize {
 		this._items = items;
 		this._fixedItems = items.filter(i => i.options.type === 'fixed');
 		this._dynamicItems = items.filter(i => i.options.type === 'dynamic');

@@ -1,7 +1,7 @@
 import {
 	AfterViewInit, Component, ContentChildren, ElementRef, Input, NgModule, OnDestroy, OnInit, QueryList
 } from "@angular/core";
-import { DistributedItem, DistributedSize, SizeOptions } from "./distributed.size";
+import { SizeItem, DistributedSize, SizeOptions } from "./distributed.size";
 
 @Component({
 	selector: 'split-panel',
@@ -10,10 +10,10 @@ import { DistributedItem, DistributedSize, SizeOptions } from "./distributed.siz
 })
 export class SplitPanel implements OnInit {
 	private _elm: HTMLElement;
-	private _size!: DistributedItem;
+	private _size!: SizeItem;
 	@Input() options: SizeOptions = { type: 'dynamic' };
 
-	public get size(): DistributedItem {
+	public get size(): SizeItem {
 		return this._size;
 	}
 	public get elm(): HTMLElement {
@@ -24,7 +24,7 @@ export class SplitPanel implements OnInit {
 		this._elm.style.position = 'absolute';
 	}
 	ngOnInit(): void {
-		this._size = new DistributedItem(this.options)
+		this._size = new SizeItem(this.options)
 	}
 }
 
