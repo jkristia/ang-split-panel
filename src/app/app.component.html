@@ -1,24 +1,28 @@
 <div class="main">
 	<div class="content">
 		<split-container>
-			<split-panel>
+
+			<split-panel [options]="{ type: 'dynamic', ratio: 1 }">
 				<div class="panel no1"></div>
 			</split-panel>
-			<split-panel>
+
+			<split-panel [options]="{ type: 'dynamic', ratio: 2 }">
 				<div class="panel no2">
 					<split-container [options]="{ direction: 'horizontal' }">
 						<split-panel>
-							<div class="panel no1"></div>
+							<div class="panel no4"></div>
 						</split-panel>
 						<split-panel>
-							<div class="panel no3"></div>
+							<div class="panel no5"></div>
 						</split-panel>
 					</split-container>
 				</div>
 			</split-panel>
-			<split-panel>
+
+			<split-panel [options]="{ type: 'dynamic', ratio: 1 }">
 				<div class="panel no3"></div>
 			</split-panel>
+
 		</split-container>
 
 	</div>
