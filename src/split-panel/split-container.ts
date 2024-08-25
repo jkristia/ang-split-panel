@@ -52,10 +52,10 @@ export class SplitPanel implements OnInit {
 				// 	}
 				// }
 				// if (this.isVertical) {
-				const width = info.curX - this.offset; // .rect.left;
+				const width = info.curX - this.offset - 10; // .rect.left;
 				const r = this.owner!.elm.getBoundingClientRect();
 				const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.width) || 0;
-				this.size.setSizeFromDrag(Math.min(maxAvailableSize, width));
+				this.size.setSizeFromDrag(width, maxAvailableSize);
 				console.log('new width ', width)
 				//     this.size.setWidthFromSplitterDrag(width);
 				// }
@@ -105,6 +105,10 @@ export class SplitContainer implements OnInit, AfterViewInit, OnDestroy {
 	ngOnInit(): void {
 		this._resize = new ResizeObserver(elms => {
 			const r = elms[0].contentRect;
+			// skp initial empty rect, this happens for nested split containers
+			if (r.width === 0 && r.height === 0) {
+				return;
+			}
 			this.handleSizeChange(r.width, r.height)
 		});
 		this._resize.observe(this.elm.parentElement as HTMLElement);

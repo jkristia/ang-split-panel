@@ -103,4 +103,68 @@ describe('calculate size', () => {
 		maxAvail = size.maxAvailableSizeForItem(item, 150);
 		expect(maxAvail).toBe(0);
 	})
+	it('set size from drag', () => {
+		const size = new DistributedSize().setItems([
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50 }),
+			new SizeItem({ type: 'dynamic', minSize: 50 }),
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50 }),
+		]);
+		const width = 400;
+		size.calculate(width);
+		expect(size.items[0].size).toBe(100);
+		expect(size.items[1].size).toBe(200);
+		expect(size.items[2].size).toBe(100);
+		expect(size.totalAllocatedSize).toBe(400);
+		// 'drag' width of first item
+		const item = size.items[0];
+		let avail = size.maxAvailableSizeForItem(item, width);
+		item.setSizeFromDrag(150, avail);
+		size.calculate(width);
+		expect(size.items[0].size).toBe(150);
+		expect(size.items[1].size).toBe(150);
+		expect(size.items[2].size).toBe(100);
+		expect(size.totalAllocatedSize).toBe(400);
+
+		avail = size.maxAvailableSizeForItem(item, width);
+		item.setSizeFromDrag(300, avail);
+		size.calculate(width);
+		expect(size.items[0].size).toBe(250);
+		expect(size.items[1].size).toBe(50);
+		expect(size.items[2].size).toBe(100);
+		expect(size.totalAllocatedSize).toBe(400);
+	})
+	it('squeeze on reducing size', () => {
+		const size = new DistributedSize().setItems([
+			new SizeItem({ type: 'fixed', size: 150, minSize: 50 }),
+			new SizeItem({ type: 'dynamic', minSize: 50 }),
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50 }),
+		]);
+		size.calculate(400);
+		expect(size.items[0].size).toBe(150);
+		expect(size.items[1].size).toBe(150);
+		expect(size.items[2].size).toBe(100);
+		expect(size.totalAllocatedSize).toBe(400);
+		size.calculate(300);
+		expect(size.items[0].size).toBe(150);
+		expect(size.items[1].size).toBe(50);
+		expect(size.items[2].size).toBe(100);
+		expect(size.totalAllocatedSize).toBe(300);
+		size.calculate(299);
+		expect(size.items[0].size).toBe(149);
+		expect(size.items[1].size).toBe(50);
+		expect(size.items[2].size).toBe(100);
+		expect(size.totalAllocatedSize).toBe(299);
+		size.calculate(160);
+		expect(size.items[0].size).toBe(50);
+		expect(size.items[1].size).toBe(50);
+		expect(size.items[2].size).toBe(60);
+		expect(size.totalAllocatedSize).toBe(160);
+		size.calculate(150); // min size
+		expect(size.items[0].size).toBe(50);
+		expect(size.items[1].size).toBe(50);
+		expect(size.items[2].size).toBe(50);
+		expect(size.totalAllocatedSize).toBe(150);
+		// what next, overflow or squeeze evenly ?
+
+	})
 })

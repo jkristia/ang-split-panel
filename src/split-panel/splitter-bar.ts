@@ -1,23 +1,23 @@
 
 /*
-    .splitter-bar {
-        top: 0px;
-        position: absolute;
-        width: 5px;
-        height: 100%;
-        background-color: blue;
-        opacity: 0.1;
+	.splitter-bar {
+		top: 0px;
+		position: absolute;
+		width: 5px;
+		height: 100%;
+		background-color: blue;
+		opacity: 0.1;
 
-        &.right {
-            right: 3px;
-            z-index: 1000;
-            &:hover {
-                opacity: 1;
-                background-color: greenyellow;
-                cursor: ew-resize;
-            }
-        }
-    }
+		&.right {
+			right: 3px;
+			z-index: 1000;
+			&:hover {
+				opacity: 1;
+				background-color: greenyellow;
+				cursor: ew-resize;
+			}
+		}
+	}
 */
 
 import { ISvgDragUpdate, MouseTracker } from "./mouse-tracker";
@@ -31,9 +31,9 @@ export class SplitterBar {
 	}
 	public set enabled(value: boolean) {
 		let elm = this._elm;
-        if (!elm) {
-            return;
-        }
+		if (!elm) {
+			return;
+		}
 		this._enabled = value;
 		if (value) {
 			this._owner.style.padding = '0 5px 0 0';
@@ -47,9 +47,9 @@ export class SplitterBar {
 	}
 	public center(): { x: number, y: number } {
 		let elm = this._elm;
-        if (!elm) {
-            return { x: 0, y: 0 };
-        }
+		if (!elm) {
+			return { x: 0, y: 0 };
+		}
 		let r = elm.getBoundingClientRect();
 		let x = r.left + elm.clientWidth / 2;
 		let y = r.top + elm.clientHeight / 2;
@@ -59,9 +59,9 @@ export class SplitterBar {
 		if (this._elm) {
 			// already attached
 			return this;
-        }
-        this._elm = document.createElement('div');
-        this._owner.append(this._elm);
+		}
+		this._elm = document.createElement('div');
+		this._owner.append(this._elm);
 
 		if (this._horizotal) {
 			this._elm.classList.add('splitter-bar-horz');
