@@ -1,3 +1,4 @@
+@import '../colors.scss';
 .main {
     position: absolute;
     top: 0;
@@ -10,26 +11,26 @@
 .content {
     width: 100%;
     height: 100%;
-    // background-color: #3f4042;
+    background-color: $panel-background;
     .panel {
         width: 100%;
         height: 100%;
         // padding: 5px;
     }
     .no1 {
-        background-color: green;
+        // background-color: green;
     }
     .no2 {
-        background-color: rgb(26, 31, 16);
+        // background-color: rgb(26, 31, 16);
     }
     .no3 {
-        background-color: darkblue;
+        // background-color: darkblue;
     }
     .no4 {
-        background-color: rgb(165, 155, 15);
+        // background-color: rgb(165, 155, 15);
     }
     .no5 {
-        background-color: rgb(54, 54, 136);
+        // background-color: rgb(54, 54, 136);
     }
 
 }

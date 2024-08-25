@@ -13,7 +13,7 @@ export interface ISvgDragUpdate {
 }
 export class MouseTracker {
 
-	public Threshold = 4;
+	public Threshold = 0;
 	static primaryButton = 1;
 	static secondaryButton = 2;
 

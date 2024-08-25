@@ -43,7 +43,7 @@ export class SplitPanel implements OnInit {
 			this._splitter = new SplitterBar(this.elm, position).attach((info) => {
 				const barOffset = 10;
 				if (position === 'top') {
-					const diff = info.curY - this.offset - barOffset;
+					const diff = info.curY - this.offset - barOffset + 4;
 					const height = this.size.size - diff;
 					const r = this.owner!.elm.getBoundingClientRect();
 					const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.height) || 0;
@@ -56,7 +56,7 @@ export class SplitPanel implements OnInit {
 					this.size.setSizeFromDrag(height, maxAvailableSize);
 				}
 				if (position === 'left') {
-					const diff = info.curX - this.offset - barOffset;
+					const diff = info.curX - this.offset - barOffset + 4;
 					const width = this.size.size - diff;
 					const r = this.owner!.elm.getBoundingClientRect();
 					const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.width) || 0;
