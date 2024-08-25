@@ -12,25 +12,17 @@
     width: 100%;
     height: 100%;
     background-color: $panel-background;
+    color: #797979;
+    font-family: sans-serif;
+    .column  {
+        width: 100%;
+        height: 100%;
+    }
     .panel {
         width: 100%;
         height: 100%;
-        // padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
-    .no1 {
-        // background-color: green;
-    }
-    .no2 {
-        // background-color: rgb(26, 31, 16);
-    }
-    .no3 {
-        // background-color: darkblue;
-    }
-    .no4 {
-        // background-color: rgb(165, 155, 15);
-    }
-    .no5 {
-        // background-color: rgb(54, 54, 136);
-    }
-
 }
