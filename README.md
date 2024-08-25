@@ -33,4 +33,4 @@ Example of panel split. Work in progress
 </split-container>
 
 ```
-![image](panel-split.png)
+![image](split-panel.png)
