@@ -2,11 +2,11 @@
 	<div class="content">
 		<split-container>
 
-			<split-panel [options]="{ type: 'fixed', size: 200 }">
+			<split-panel [options]="{ type: 'fixed', size: 200, minSize: 100, canDrag: true }">
 				<div class="panel no1"></div>
 			</split-panel>
 
-			<split-panel [options]="{ type: 'dynamic', ratio: 2 }">
+			<split-panel [options]="{ type: 'dynamic', ratio: 2, minSize: 200, }">
 				<div class="panel no2">
 					<split-container [options]="{ direction: 'horizontal' }">
 						<split-panel>
@@ -19,7 +19,7 @@
 				</div>
 			</split-panel>
 
-			<split-panel [options]="{ type: 'dynamic', ratio: 1 }">
+			<split-panel [options]="{ type: 'fixed', size: 200 }">
 				<div class="panel no3"></div>
 			</split-panel>
 

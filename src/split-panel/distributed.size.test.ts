@@ -89,4 +89,18 @@ describe('calculate size', () => {
 		expect(size.items[1].idealSize).toBe(7.5);
 		expect(size.items[2].idealSize).toBe(2.5);
 	})
+	it('maxAvailableSizeForItem', () => {
+		const size = new DistributedSize().setItems([
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50 }),
+			new SizeItem({ type: 'dynamic', minSize: 50 }),
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50 }),
+		]);
+		const item = size.items[0];
+		let maxAvail = size.maxAvailableSizeForItem(item, 400);
+		expect(maxAvail).toBe(250);
+		maxAvail = size.maxAvailableSizeForItem(item, 300);
+		expect(maxAvail).toBe(150);
+		maxAvail = size.maxAvailableSizeForItem(item, 150);
+		expect(maxAvail).toBe(0);
+	})
 })

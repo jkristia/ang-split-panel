@@ -4,10 +4,12 @@ export interface SizeOptions {
 	ratio?: number; 	// the ratio to which to split the remaining width across dynamic items
 	size?: number;		// size for fixed sized panels
 	minSize?: number;	// minSize, idealSize will be set to this, actual width depends on 'squeeze' method
+	canDrag?: boolean;	// enable splitter 
 }
 
 export class SizeItem {
 	private _idealSize: number = 0;
+	private _sizeFromDrag?: number;
 	public get ratio(): number {
 		if (this.options.type === 'fixed') {
 			return 1;
@@ -18,6 +20,9 @@ export class SizeItem {
 		return this.options.ratio;
 	}
 	public get size(): number {
+		if (this._sizeFromDrag !== undefined) {
+			return this._sizeFromDrag;
+		}
 		return this._idealSize;
 	}
 	public get idealSize(): number {
@@ -31,8 +36,15 @@ export class SizeItem {
 	}
 	constructor(
 		public readonly options: SizeOptions
-	) { }
+	) {
+		if (this.options.type === 'fixed' && this.options.size) {
+			this._idealSize = this.options.size;
+		}
+	}
 
+	public setSizeFromDrag(size: number) {
+		this._sizeFromDrag = Math.max(this.minSize, size);
+	}
 	public setIdealSize(size: number): SizeItem {
 		this._idealSize = Math.max(this.minSize, size);
 		return this;
@@ -58,11 +70,28 @@ export class DistributedSize {
 		this._dynamicItems = items.filter(i => i.options.type === 'dynamic');
 		return this;
 	}
+	public maxAvailableSizeForItem(item: SizeItem, AvailableSize: number): number {
+		// return max available size when excluding the passed item
+		// for fixed item it is the current size
+		// for dynamic items it is the min size
+		this._items.forEach( i => {
+			if ( i === item) {
+				return
+			}
+			if (i.options.type === 'fixed') {
+				AvailableSize -= i.size;
+			}
+			if (i.options.type === 'dynamic') {
+				AvailableSize -= i.minSize;
+			}
+		})
+		return AvailableSize;
+	}
 	public calculate(size: number) {
 		let remainingSize = size;
 		// subtract fixed size
 		this._fixedItems.forEach(item => {
-			const size = item.options.size || 0;
+			const size = item.size || 0;
 			item.setIdealSize(size);
 			remainingSize -= size;
 		});
