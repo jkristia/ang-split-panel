@@ -3,6 +3,7 @@
 Example of panel split. Work in progress
 
 ```html
+
 <split-container>
 
 	<split-panel [options]="{ size: 200, minSize: 100, canDrag: true }">
