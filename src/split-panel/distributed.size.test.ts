@@ -17,6 +17,20 @@ describe('disributed item', () => {
 		expect(item.setIdealSize(101).idealSize).toBe(101)
 		expect(item.setIdealSize(99).idealSize).toBe(100)
 	})
+	it('infer type from options', () => {
+		let item = new SizeItem({});
+		expect(item.options.type).toBe('dynamic');
+		expect(item.ratio).toBe(1)
+		item = new SizeItem({ ratio: 0.5 });
+		expect(item.options.type).toBe('dynamic');
+		expect(item.ratio).toBe(0.5)
+		item = new SizeItem({ ratio: 0.5, size: 123 });
+		expect(item.options.type).toBe('fixed');
+		expect(item.size).toBe(123)
+		item = new SizeItem({ size: 321 });
+		expect(item.options.type).toBe('fixed');
+		expect(item.size).toBe(321)
+	})
 })
 describe('calculate size', () => {
 	it('dynamic items with no ratio, no min', () => {

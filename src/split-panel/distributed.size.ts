@@ -1,6 +1,6 @@
 
 export interface SizeOptions {
-	type: 'fixed' | 'dynamic';
+	type?: 'fixed' | 'dynamic';
 	ratio?: number; 	// the ratio to which to split the remaining width across dynamic items
 	size?: number;		// size for fixed sized panels
 	minSize?: number;	// minSize, idealSize will be set to this, actual width depends on 'squeeze' method
@@ -37,6 +37,16 @@ export class SizeItem {
 	constructor(
 		public readonly options: SizeOptions
 	) {
+		if (!this.options.type && this.options.size) {
+			this.options.type = 'fixed';
+		}
+		if (!this.options.type && this.options.ratio) {
+			this.options.type = 'dynamic';
+		}
+		if (!this.options.type && !this.options.ratio) {
+			this.options.type = 'dynamic';
+			this.options.ratio = 1;
+		}
 		if (this.options.type === 'fixed' && this.options.size) {
 			this._idealSize = this.options.size;
 		}
