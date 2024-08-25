@@ -6,40 +6,64 @@
 	background-color: olivedrab;
 
 	::ng-deep .splitter-bar {
-        top: 0px;
-        bottom: 0px;
         position: absolute;
-        width: 5px;
-        background-color: rgb(0, 255, 200);
-        opacity: 0.0;
+        // background-color: rgb(0, 255, 200);
+        opacity: 0;
+        z-index: 1000;
 
-        &.right {
-            right: 0px;
-            z-index: 1000;
-            cursor: ew-resize;
-            &:hover {
-                opacity: 1;
-                background-color: rgb(255, 255, 255);
-            }
+        &:hover {
+            opacity: 1;
+            background-color: rgb(255, 255, 255);
         }
-    }
-	::ng-deep .splitter-bar-horz {
-        left: 0px;
-        right: 0px;
-        position: absolute;
-        height: 5px;
-        background-color: rgb(0, 255, 200);
-        opacity: 0.0;
+        &.is-tracking {
+            opacity: 1;
+            // background-color: rgb(151, 151, 151);
+            background-color: yellow;
+        }
 
-        &.bottom {
+        &.vert {
+            top: 0px;
             bottom: 0px;
-            z-index: 1000;
+            width: 5px;
+            &.is-tracking {
+                width: 10px;
+                &.left {
+                    left: -5px;
+                }
+                &.right {
+                    right: -5px;
+                }
+            }
+            cursor: ew-resize;
+    
+            &.left {
+                left: 0px;
+            }
+            &.right {
+                right: 0px;
+            }
+        }
+        &.horz {
+            left: 0px;
+            right: 0px;
+            height: 5px;
+            &.is-tracking {
+                height: 10px;
+                &.top {
+                    top: -5px;
+                }
+                &.bottom {
+                    bottom: -5px;
+                }
+            }
             cursor: ns-resize;
-            &:hover {
-                opacity: 1;
-                background-color: rgb(255, 255, 255);
+    
+            &.top {
+                top: 0px;
+            }
+            &.bottom {
+                bottom: 0px;
             }
         }
     }
-
 }

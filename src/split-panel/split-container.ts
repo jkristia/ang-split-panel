@@ -2,7 +2,7 @@ import {
 	AfterViewInit, Component, ContentChildren, ElementRef, Input, NgModule, OnDestroy, OnInit, QueryList
 } from "@angular/core";
 import { SizeItem, DistributedSize, SizeOptions } from "./distributed.size";
-import { SplitterBar } from "./splitter-bar";
+import { SplitterBar, SplitterPosition } from "./splitter-bar";
 import { ISvgDragUpdate } from "./mouse-tracker";
 
 @Component({
@@ -18,6 +18,7 @@ export class SplitPanel implements OnInit {
 
 	public offset = 0;
 	public owner?: SplitContainer;
+	public lastPanel = false;
 	public get size(): SizeItem {
 		return this._size;
 	}
@@ -34,52 +35,45 @@ export class SplitPanel implements OnInit {
 
 	public attachSplitter(fn: (info: ISvgDragUpdate) => void) {
 		if (!this._splitter) {
+			let position: SplitterPosition = this.lastPanel ? 'left' : 'right';
 			const horizontal = this.owner?.options.direction === 'horizontal';
-			const vertical = !horizontal;
-			this._splitter = new SplitterBar(this.elm, horizontal).attach((info) => {
-				// if (this.resizedSize === null) {
-				// 	this.resizedSize = this._size.size;
-				// }
-				// let cursize = this.resizedSize;
-				// let splitpos = this._splitter.center();
-				// if (this.isHorizontal) {
-				// 	// move left - only if drag.cur < center.x
-				// 	if (info.diffY > 0 && info.curY <= splitpos.y) {
-				// 		this.resizedSize += info.diffY;
-				// 	}
-				// 	// move right - only if drag.cur > center.x
-				// 	if (info.diffY < 0 && info.curY >= splitpos.y) {
-				// 		this.resizedSize += info.diffY;
-				// 	}
-				// }
-				// if (this.isVertical) {
-				if (horizontal) {
-					const height = info.curY - this.offset - 10; // .rect.left;
+			if (horizontal) {
+				position = this.lastPanel ? 'top' : 'bottom';
+			}
+			this._splitter = new SplitterBar(this.elm, position).attach((info) => {
+				const barOffset = 10;
+				if (position === 'top') {
+					const diff = info.curY - this.offset - barOffset;
+					const height = this.size.size - diff;
 					const r = this.owner!.elm.getBoundingClientRect();
 					const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.height) || 0;
 					this.size.setSizeFromDrag(height, maxAvailableSize);
-					console.log('(H) new height ', height)
 				}
-				if (vertical) {
-					const width = info.curX - this.offset - 10; // .rect.left;
+				if (position === 'bottom') {
+					const height = info.curY - this.offset - barOffset;
+					const r = this.owner!.elm.getBoundingClientRect();
+					const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.height) || 0;
+					this.size.setSizeFromDrag(height, maxAvailableSize);
+				}
+				if (position === 'left') {
+					const diff = info.curX - this.offset - barOffset;
+					const width = this.size.size - diff;
 					const r = this.owner!.elm.getBoundingClientRect();
 					const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.width) || 0;
 					this.size.setSizeFromDrag(width, maxAvailableSize);
-					console.log('(V) new width ', width)
 				}
-				//     this.size.setWidthFromSplitterDrag(width);
-				// }
-				// if (this.resizedSize < 10) {
-				// 	this.resizedSize = 10;
-				// }
-				// only notify if there is a change
-				if (fn/* && cursize !== this.resizedSize*/) {
+				if (position === 'right') {
+					const width = info.curX - this.offset - barOffset;
+					const r = this.owner!.elm.getBoundingClientRect();
+					const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.width) || 0;
+					this.size.setSizeFromDrag(width, maxAvailableSize);
+				}
+				if (fn) {
 					fn(info);
 				}
 			});
 		}
 	}
-
 }
 
 export interface SplitContainerOptions {
@@ -162,6 +156,12 @@ export class SplitContainer implements OnInit, AfterViewInit, OnDestroy {
 	}
 	private setupSplitter() {
 		const panels = this._panels?.toArray() || [];
+		if (panels.length <= 1) {
+			// do not enable splitter if only 1 panel
+			return;
+		}
+		// if last panel, splitter bar is either left or top
+		panels[panels.length - 1].lastPanel = true;
 		panels.forEach(p => {
 			if (p.options.canDrag) {
 				p.attachSplitter((info) => {
