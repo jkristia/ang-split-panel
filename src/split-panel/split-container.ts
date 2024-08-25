@@ -35,6 +35,7 @@ export class SplitPanel implements OnInit {
 	public attachSplitter(fn: (info: ISvgDragUpdate) => void) {
 		if (!this._splitter) {
 			const horizontal = this.owner?.options.direction === 'horizontal';
+			const vertical = !horizontal;
 			this._splitter = new SplitterBar(this.elm, horizontal).attach((info) => {
 				// if (this.resizedSize === null) {
 				// 	this.resizedSize = this._size.size;
@@ -52,11 +53,20 @@ export class SplitPanel implements OnInit {
 				// 	}
 				// }
 				// if (this.isVertical) {
-				const width = info.curX - this.offset - 10; // .rect.left;
-				const r = this.owner!.elm.getBoundingClientRect();
-				const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.width) || 0;
-				this.size.setSizeFromDrag(width, maxAvailableSize);
-				console.log('new width ', width)
+				if (horizontal) {
+					const height = info.curY - this.offset - 10; // .rect.left;
+					const r = this.owner!.elm.getBoundingClientRect();
+					const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.height) || 0;
+					this.size.setSizeFromDrag(height, maxAvailableSize);
+					console.log('(H) new height ', height)
+				}
+				if (vertical) {
+					const width = info.curX - this.offset - 10; // .rect.left;
+					const r = this.owner!.elm.getBoundingClientRect();
+					const maxAvailableSize = this.owner?.size.maxAvailableSizeForItem(this.size, r.width) || 0;
+					this.size.setSizeFromDrag(width, maxAvailableSize);
+					console.log('(V) new width ', width)
+				}
 				//     this.size.setWidthFromSplitterDrag(width);
 				// }
 				// if (this.resizedSize < 10) {

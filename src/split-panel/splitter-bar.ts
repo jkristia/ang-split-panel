@@ -36,14 +36,14 @@ export class SplitterBar {
 		}
 		this._enabled = value;
 		if (value) {
-			this._owner.style.padding = '0 5px 0 0';
+			this._owner.style.padding = '0 0 0 0';
 			elm.style.visibility = 'visible';
 		} else {
 			this._owner.style.padding = '0';
 			elm.style.visibility = 'hidden';
 		}
 	}
-	constructor(private _owner: HTMLElement, private _horizotal = false) {
+	constructor(private _owner: HTMLElement, private _horizontal = false) {
 	}
 	public center(): { x: number, y: number } {
 		let elm = this._elm;
@@ -63,10 +63,10 @@ export class SplitterBar {
 		this._elm = document.createElement('div');
 		this._owner.append(this._elm);
 
-		if (this._horizotal) {
+		if (this._horizontal) {
 			this._elm.classList.add('splitter-bar-horz');
 			// attach right, add padding to panel to not overlap content
-			this._elm.classList.add('top');
+			this._elm.classList.add('bottom');
 		} else {
 			this._elm.classList.add('splitter-bar');
 			// attach right, add padding to panel to not overlap content
@@ -77,10 +77,10 @@ export class SplitterBar {
 			if (dragevent !== 'update') {
 				return;
 			}
-			if (this.enabled && this._horizotal === false && fn && info.trackX) {
+			if (this.enabled && this._horizontal === false && fn && info.trackX) {
 				fn(info);
 			}
-			if (this.enabled && this._horizotal === true && fn && info.trackY) {
+			if (this.enabled && this._horizontal === true && fn && info.trackY) {
 				fn(info);
 			}
 		});

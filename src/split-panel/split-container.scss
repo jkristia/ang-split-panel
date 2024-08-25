@@ -7,13 +7,11 @@
 
 	::ng-deep .splitter-bar {
         top: 0px;
+        bottom: 0px;
         position: absolute;
         width: 5px;
-        // margin: 5px;
-
-        height: 100%;
-        background-color: blue;
-        opacity: 0.8;
+        background-color: rgb(0, 255, 200);
+        opacity: 0.0;
 
         &.right {
             right: 0px;
@@ -21,7 +19,25 @@
             cursor: ew-resize;
             &:hover {
                 opacity: 1;
-                background-color: rgb(111, 114, 107);
+                background-color: rgb(255, 255, 255);
+            }
+        }
+    }
+	::ng-deep .splitter-bar-horz {
+        left: 0px;
+        right: 0px;
+        position: absolute;
+        height: 5px;
+        background-color: rgb(0, 255, 200);
+        opacity: 0.0;
+
+        &.bottom {
+            bottom: 0px;
+            z-index: 1000;
+            cursor: ns-resize;
+            &:hover {
+                opacity: 1;
+                background-color: rgb(255, 255, 255);
             }
         }
     }
