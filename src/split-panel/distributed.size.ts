@@ -52,13 +52,48 @@ export class SizeItem {
 		}
 	}
 
-	public setSizeFromDrag(newSize: number, maxAvailableSize: number) {
+	public setSizeFromDrag(newSize: number, maxAvailableSize: number, allItems?: SizeItem[]) {
+		if (this.options.type === 'dynamic') {
+			this.handleDynamicSizeFromDrag(newSize, allItems);
+			return;
+		}
 		newSize = Math.min(newSize, maxAvailableSize);
 		this._sizeFromDrag = Math.max(this.minSize, newSize);
 	}
 	public setIdealSize(size: number): SizeItem {
 		this._idealSize = Math.max(this.minSize, size);
 		return this;
+	}
+	private handleDynamicSizeFromDrag(newSize: number, allItems?: SizeItem[]) {
+		const dynamicItems = (allItems || []).filter(i => i.options.type === 'dynamic');
+		const otherItems = dynamicItems.filter(i => i !== this);
+		// nothing to adjust with just a single item
+		if (dynamicItems.length < 2) {
+			return;
+		}
+		newSize = Math.max(this.minSize, newSize);
+		const currentTotalDynamicSize = dynamicItems.map(i => i.size).reduce((sum, value) => sum + value);
+		const currentSizeOfOther = currentTotalDynamicSize - this.size;
+		const newSizeOfOther = currentTotalDynamicSize - newSize;
+
+		// console.log('-')
+		// console.log('currentTotalDynamicSize: ', currentTotalDynamicSize)
+		// console.log('newSize                : ', this.size, newSize)
+		// console.log('currentSizeOfOther     : ', currentSizeOfOther)
+		// console.log('newSizeOfOther         : ', newSizeOfOther)
+		// find ratio of other items to the current size (excuding this item)
+		otherItems.forEach(i => i.options.ratio = i.size / currentSizeOfOther);
+		// update ratio of other items to the new size
+		otherItems.forEach(i => i.setIdealSize(newSizeOfOther * i.options.ratio!))
+		// set size for this item
+		this.setIdealSize(newSize)
+		// now update all ratios based on size compared to the new size
+		dynamicItems.forEach(i => i.options.ratio = i.size / currentTotalDynamicSize);
+		// dynamicItems.forEach( i => {
+		// 	console.log('ratio :', i.options.ratio)
+		// 	console.log(' size :', i.size)
+
+		// })
 	}
 }
 

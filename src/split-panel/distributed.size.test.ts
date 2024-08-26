@@ -181,4 +181,34 @@ describe('calculate size', () => {
 		// what next, overflow or squeeze evenly ?
 
 	})
+	it('drag dynamic panel', () => {
+		const size = new DistributedSize().setItems([
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50 }),
+			new SizeItem({ type: 'dynamic', ratio: 1, minSize: 10 }),
+			new SizeItem({ type: 'dynamic', ratio: 1, minSize: 10 }),
+			new SizeItem({ type: 'dynamic', ratio: 1, minSize: 10 }),
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50 }),
+		]);
+		const width = 500;
+		size.calculate(width);
+		// all items equal width
+		size.items.forEach( i => expect(i.size).toBe(100));
+		const dragItem = size.items[1]
+		let avail = size.maxAvailableSizeForItem(dragItem, width);
+		dragItem.setSizeFromDrag(90, avail, size.items);
+		expect(size.items[1].options.ratio).toBe(0.3)
+		expect(size.items[1].size).toBe(90)
+		expect(size.items[2].options.ratio).toBe(0.35)
+		expect(size.items[2].size).toBe(105)
+		expect(size.items[3].options.ratio).toBe(0.35)
+		expect(size.items[3].size).toBe(105)
+
+		dragItem.setSizeFromDrag(25, avail, size.items);
+		expect(size.items[1].options.ratio).toBeCloseTo(0.0833, 4)
+		expect(size.items[1].size).toBe(25)
+		expect(size.items[2].options.ratio).toBeCloseTo(0.4583, 4)
+		expect(size.items[2].size).toBe(137.5)
+		expect(size.items[3].options.ratio).toBeCloseTo(0.4583, 4)
+		expect(size.items[3].size).toBe(137.5)
+	})
 })
