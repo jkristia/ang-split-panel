@@ -1,3 +1,8 @@
+/*
+	Jesper Kristiansen
+	https://github.com/jkristia/ang-split-panel
+*/
+
 import { ISvgDragEvent, ISvgDragUpdate, MouseTracker } from "./mouse-tracker";
 
 export type SplitterPosition = 'left' | 'right' | 'top' | 'bottom';

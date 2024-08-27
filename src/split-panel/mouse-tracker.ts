@@ -1,4 +1,3 @@
-
 export type ISvgDragEvent = 'begin' | 'update' | 'end';
 export interface ISvgDragUpdate {
 	elm: SVGElement | HTMLElement | null;
@@ -48,18 +47,15 @@ export class MouseTracker {
 		this._initialMouseDownFn = this._elm.onmousedown;
 		this._initialMouseUpFn = this._elm.onmouseup;
 		this._elm.onmousedown = (ev: MouseEvent): void => {
-			// console.log('drag onmousedown');
 			this.mousedown(ev);
 		};
 		this._elm.onmousemove = (ev: MouseEvent): void => {
-			// console.log('drag onmousemove', this.isTracking);
 			if (!this.isTracking) {
 				return;
 			}
 			this.mousemove(ev);
 		};
 		this._elm.onmouseup = (ev: MouseEvent): void => {
-			// console.log('drag onmouseup');
 			this.mouseup(ev);
 		};
 		return this;
@@ -92,7 +88,6 @@ export class MouseTracker {
 		this._dragInfo.curX = event.clientX;
 		this._dragInfo.curY = event.clientY;
 		this._onDragInfoFn('begin', this._dragInfo);
-		this.dumpInfo();
 	}
 
 	private updateDrag(event: MouseEvent): void {
@@ -122,14 +117,11 @@ export class MouseTracker {
 			this._onDragInfoFn('update', this._dragInfo);
 			this.clearClickHandler();
 		}
-		this.dumpInfo();
 	}
 
 	private endDrag(/* event: MouseEvent*/): void {
 		this._isTracking = false;
 		this._onDragInfoFn('end', this._dragInfo);
-		// console.log(`endDrag ${this._isThumbTracking}`);
-		this.dumpInfo();
 	}
 
 	private mousemove = (ev: MouseEvent) => {
@@ -143,7 +135,6 @@ export class MouseTracker {
 		}
 		this.endDrag(/* ev*/);
 		ev.stopPropagation();
-		// console.log('tracker mouseup');
 	};
 
 	private _clickHandlerFn: any = null;
@@ -166,11 +157,6 @@ export class MouseTracker {
 		setTimeout(() => {
 			this.restoreClickHandler();
 		}, 0);
-	}
-	private dumpInfo() {
-		// let i = this._dragInfo;
-		// console.log(`${i.initialX}, ${i.curX}, ${i.diffX}, drag = ${i.trackX}`);
-		// console.log(`${i.initialX}: ${i.initialY}, ${i.curX}:${i.curY}, ${i.diffX}:${i.diffY}, drag = ${this._isThumbTracking}`);
 	}
 }
 

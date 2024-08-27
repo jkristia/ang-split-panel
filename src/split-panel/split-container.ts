@@ -1,3 +1,8 @@
+/*
+	Jesper Kristiansen
+	https://github.com/jkristia/ang-split-panel
+*/
+
 import {
 	AfterViewInit, Component, ContentChildren, ElementRef, Input, NgModule, OnDestroy, OnInit, QueryList
 } from "@angular/core";

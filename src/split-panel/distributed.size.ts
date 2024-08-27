@@ -1,3 +1,7 @@
+/*
+	Jesper Kristiansen
+	https://github.com/jkristia/ang-split-panel
+*/
 
 export interface SizeOptions {
 	type?: 'fixed' | 'dynamic';
