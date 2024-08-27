@@ -10,7 +10,8 @@ $split-drag: #0078D4;
 	::ng-deep .splitter-bar {
 		position: absolute;
 		z-index: 1000;
-		border: 1px solid transparent;
+		opacity: 0.0;
+		transition: opacity 0.1s ease-in-out;
 
 		&:hover {
 			opacity: 1;
@@ -21,51 +22,15 @@ $split-drag: #0078D4;
 			background-color: $split-drag;
 		}
 		&.vert {
-			top: 0px;
-			bottom: 0px;
-			width: 5px;
+			top: 5px;
+			bottom: 5px;
 			cursor: ew-resize;
-			&.is-tracking {
-				// width: 10px;
-				&.left {
-					left: -5px;
-				}
-				&.right {
-					right: -5px;
-				}
-			}
-			&.left {
-				left: 0px;
-				border-left-color: $border-color;
-			}
-			&.right {
-				right: 0px;
-				border-right-color: $border-color;
-			}
 		}
 
 		&.horz {
-			left: 0px;
-			right: 0px;
-			height: 5px;
+			left: 5px;
+			right: 5px;
 			cursor: ns-resize;
-			&.is-tracking {
-				// height: 10px;
-				&.top {
-					top: -5px;
-				}
-				&.bottom {
-					bottom: -5px;
-				}
-			}
-			&.top {
-				top: 0px;
-				border-top-color: $border-color;
-			}
-			&.bottom {
-				bottom: 0px;
-				border-bottom-color: $border-color;
-			}
 		}
 	}
 }

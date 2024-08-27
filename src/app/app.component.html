@@ -2,17 +2,17 @@
 	<split-container>
 
 		<split-panel [options]="{ size: 200, minSize: 100, canDrag: true }">
-			<div class="panel">Panel #1</div>
+			<div class="panel border-right">Panel #1</div>
 		</split-panel>
 
 		<split-panel [options]="{ ratio: 2, minSize: 200, canDrag: true }">
-			<div class="column">
+			<div class="column border-right">
 				<split-container [options]="{ direction: 'horizontal' }">
 					<split-panel [options]="{ size: 200, minSize: 100, canDrag: true }">
-						<div class="panel">Panel #2</div>
+						<div class="panel border-bottom">Panel #2</div>
 					</split-panel>
 					<split-panel [options]="{ ratio: 1, minSize: 50}">
-						<div class="panel">Panel #3</div>
+						<div class="panel border-bottom">Panel #3</div>
 					</split-panel>
 					<split-panel [options]="{ size: 200, canDrag: true }">
 						<div class="panel">Panel #4</div>
@@ -22,7 +22,7 @@
 		</split-panel>
 
 		<split-panel [options]="{ ratio: 1 }">
-			<div class="panel">Panel #5</div>
+			<div class="panel border-right">Panel #5</div>
 		</split-panel>
 
 		<split-panel [options]="{ size: 200, canDrag: true }">
@@ -36,21 +36,17 @@
 	<split-container>
 
 		<split-panel [options]="{ ratio: 1, canDrag: true }">
-			<div class="panel">Panel #1</div>
+			<div class="panel border-right">Panel #1</div>
 		</split-panel>
-
-		<!-- <split-panel [options]="{ ratio: 1, canDrag: true }">
-			<div class="panel">Panel #2</div>
-		</split-panel> -->
 
 		<split-panel [options]="{ ratio: 1 }">
 
 			<div class="column">
 				<split-container [options]="{ direction: 'horizontal' }">
-					<split-panel [options]="{ ratio: 1, canDrag: true }">
-						<div class="panel">Panel #2</div>
-					</split-panel>
 					<split-panel [options]="{ ratio: 1 }">
+						<div class="panel border-bottom">Panel #2</div>
+					</split-panel>
+					<split-panel [options]="{ ratio: 1, canDrag: true }">
 						<div class="panel">Panel #3</div>
 					</split-panel>
 				</split-container>
@@ -62,10 +58,26 @@
 
 </ng-template>
 
+<ng-template #twoColumns_01>
+	<split-container>
+		<split-panel [options]="{ size: 400, canDrag: true }">
+			<div class="panel border-right">Panel #1</div>
+		</split-panel>
+		<split-panel [options]="{ ratio: 1 }">
+			<div class="panel border-right">Panel #2</div>
+		</split-panel>
+		<split-panel [options]="{ size: 200, canDrag: true }">
+			<div class="panel">Panel #3</div>
+		</split-panel>
+	</split-container>
+</ng-template>
+
+
 
 <div class="main">
 	<div class="content">
-		<!-- <ng-container *ngTemplateOutlet="layout01Template"></ng-container> -->
-		<ng-container *ngTemplateOutlet="dynamic2ColumnsWithResize"></ng-container>
+		<ng-container *ngTemplateOutlet="layout01Template"></ng-container>
+		<!-- <ng-container *ngTemplateOutlet="dynamic2ColumnsWithResize"></ng-container> -->
+		<!-- <ng-container *ngTemplateOutlet="twoColumns_01"></ng-container> -->
 	</div>
 </div>
