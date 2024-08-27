@@ -34,3 +34,5 @@ Example of panel split. Work in progress
 
 ```
 ![image](split-panel.png)
+
+![](resize-example.mov)
