@@ -4,11 +4,12 @@
 */
 
 import {
-	AfterViewInit, Component, ContentChildren, ElementRef, Input, NgModule, OnDestroy, OnInit, QueryList
+	AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, Input, NgModule,
+	OnDestroy, OnInit, Output, QueryList
 } from "@angular/core";
-import { SizeItem, DistributedSize, SizeOptions } from "./distributed.size";
+import { SizeItem, DistributedSize, SizeOptions, SplitValues } from "./distributed.size";
 import { SplitterBar, SplitterPosition } from "./splitter-bar";
-import { IDragUpdate } from "./mouse-tracker";
+import { IDragEvent, IDragUpdate } from "./mouse-tracker";
 
 @Component({
 	selector: 'split-panel',
@@ -38,7 +39,7 @@ export class SplitPanel implements OnInit {
 		this._size = new SizeItem(this.options)
 	}
 
-	public attachSplitter(fn: (info: IDragUpdate) => void) {
+	public attachSplitter(fn: (dragEvent: IDragEvent, info: IDragUpdate) => void) {
 		if (!this._splitter) {
 			let position: SplitterPosition = this.lastPanel ? 'left' : 'right';
 			const horizontal = this.owner?.options.direction === 'horizontal';
@@ -53,6 +54,9 @@ export class SplitPanel implements OnInit {
 				}
 				if (dragEvent === 'end') {
 					initialSize = 0;
+					if (fn) {
+						fn(dragEvent, info);
+					}
 					return;
 				}
 				const barOffset = 10;
@@ -88,7 +92,7 @@ export class SplitPanel implements OnInit {
 					this.size.setSizeFromDrag(width, maxAvailableSize, allItems);
 				}
 				if (fn) {
-					fn(info);
+					fn(dragEvent, info);
 				}
 			});
 		}
@@ -113,6 +117,7 @@ export class SplitContainer implements OnInit, AfterViewInit, OnDestroy {
 	private _size = new DistributedSize();
 	private _elm: HTMLElement;
 	@Input() options: SplitContainerOptions = { direction: 'vertical' };
+	@Output() dragEnd = new EventEmitter<SplitValues>();
 	@ContentChildren(SplitPanel) _panels?: QueryList<SplitPanel>
 
 	public get size(): DistributedSize {
@@ -183,9 +188,14 @@ export class SplitContainer implements OnInit, AfterViewInit, OnDestroy {
 		panels[panels.length - 1].lastPanel = true;
 		panels.forEach(p => {
 			if (p.options.canDrag) {
-				p.attachSplitter((info) => {
-					const r = this._elm.getBoundingClientRect();
-					this.handleSizeChange(r.width, r.height);
+				p.attachSplitter((dragEvent, info) => {
+					if (dragEvent === 'end') {
+						this.dragEnd.emit(this.size.splitValues);
+					}
+					if (dragEvent === 'update') {
+						const r = this._elm.getBoundingClientRect();
+						this.handleSizeChange(r.width, r.height);
+					}
 				})
 			}
 		})

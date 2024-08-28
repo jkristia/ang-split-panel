@@ -211,4 +211,35 @@ describe('calculate size', () => {
 		expect(size.items[3].options.ratio).toBeCloseTo(0.4583, 4)
 		expect(size.items[3].size).toBe(137.5)
 	})
+	it('get size setting', () => {
+		const size = new DistributedSize().setItems([
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50 }),
+			new SizeItem({ type: 'dynamic', minSize: 50 }),
+			new SizeItem({ type: 'dynamic', minSize: 50 }),
+		]);
+		size.calculate(400);
+		expect(size.splitValues).toEqual({
+			items: [
+				{ type: 'fixed', size: 100},
+				{ type: 'dynamic', ratio: 0.1},
+				{ type: 'dynamic', ratio: 0.1},
+			]
+		})
+		size.calculate(153);
+		expect(size.splitValues).toEqual({
+			items: [
+				{ type: 'fixed', size: 53},
+				{ type: 'dynamic', ratio: 0.1},
+				{ type: 'dynamic', ratio: 0.1},
+			]
+		})
+		size.items[1].setSizeFromDrag(200, 300, size.items)
+		expect(size.splitValues).toEqual({
+			items: [
+				{ type: 'fixed', size: 53},
+				{ type: 'dynamic', ratio: 2},
+				{ type: 'dynamic', ratio: 0.5},
+			]
+		})
+		})
 })

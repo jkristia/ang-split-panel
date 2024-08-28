@@ -3,8 +3,17 @@
 	https://github.com/jkristia/ang-split-panel
 */
 
+export interface ItemSplitValue {
+	type?: SizePanelType;
+	size?: number;
+	ratio?: number
+}
+export interface SplitValues {
+	items: ItemSplitValue[]
+}
+export type SizePanelType = 'fixed' | 'dynamic';
 export interface SizeOptions {
-	type?: 'fixed' | 'dynamic';
+	type?: SizePanelType;
 	ratio?: number; 	// the ratio to which to split the remaining width across dynamic items
 	size?: number;		// size for fixed sized panels
 	minSize?: number;	// minSize, idealSize will be set to this, actual width depends on 'squeeze' method
@@ -37,6 +46,18 @@ export class SizeItem {
 			return this.options.minSize;
 		}
 		return 0;
+	}
+	public get setting(): ItemSplitValue {
+		const result: ItemSplitValue = {
+			type: this.options.type
+		}
+		if (this.options.type === 'fixed') {
+			result.size = this.size;
+		}
+		if (this.options.type === 'dynamic') {
+			result.ratio = this.ratio;
+		}
+		return result;
 	}
 	constructor(
 		public readonly options: SizeOptions
@@ -112,6 +133,12 @@ export class DistributedSize {
 	private _dynamicItems: SizeItem[] = [];
 	public get items(): SizeItem[] {
 		return this._items;
+	}
+	public get splitValues(): SplitValues {
+		const result: SplitValues = {
+			items: this.items.map(i => i.setting)
+		}
+		return result;
 	}
 
 	public setItems(items: SizeItem[]): DistributedSize {
