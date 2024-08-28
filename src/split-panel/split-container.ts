@@ -8,12 +8,12 @@ import {
 } from "@angular/core";
 import { SizeItem, DistributedSize, SizeOptions } from "./distributed.size";
 import { SplitterBar, SplitterPosition } from "./splitter-bar";
-import { ISvgDragEvent, ISvgDragUpdate } from "./mouse-tracker";
+import { IDragUpdate } from "./mouse-tracker";
 
 @Component({
 	selector: 'split-panel',
 	template: `<ng-content></ng-content>`,
-	styleUrl: './split-container.scss',
+	styleUrls: ['./split-container.scss'],
 })
 export class SplitPanel implements OnInit {
 	private _elm: HTMLElement;
@@ -38,7 +38,7 @@ export class SplitPanel implements OnInit {
 		this._size = new SizeItem(this.options)
 	}
 
-	public attachSplitter(fn: (info: ISvgDragUpdate) => void) {
+	public attachSplitter(fn: (info: IDragUpdate) => void) {
 		if (!this._splitter) {
 			let position: SplitterPosition = this.lastPanel ? 'left' : 'right';
 			const horizontal = this.owner?.options.direction === 'horizontal';
@@ -106,7 +106,7 @@ export interface SplitContainerOptions {
 			<ng-content></ng-content>
 		</div>
 	`,
-	styleUrl: './split-container.scss',
+	styleUrls: ['./split-container.scss'],
 })
 export class SplitContainer implements OnInit, AfterViewInit, OnDestroy {
 	private _resize: ResizeObserver | null = null;

@@ -3,7 +3,7 @@
 	https://github.com/jkristia/ang-split-panel
 */
 
-import { ISvgDragEvent, ISvgDragUpdate, MouseTracker } from "./mouse-tracker";
+import { IDragEvent, IDragUpdate, MouseTracker } from "./mouse-tracker";
 
 export type SplitterPosition = 'left' | 'right' | 'top' | 'bottom';
 export class SplitterBar {
@@ -28,7 +28,7 @@ export class SplitterBar {
 	}
 	constructor(private _owner: HTMLElement, private _position: SplitterPosition) {
 	}
-	public attach(fn: (dragEvent: ISvgDragEvent, info: ISvgDragUpdate) => void): SplitterBar {
+	public attach(fn: (dragEvent: IDragEvent, info: IDragUpdate) => void): SplitterBar {
 		if (this._elm) {
 			// already attached
 			return this;
@@ -57,7 +57,7 @@ export class SplitterBar {
 			this._elm.classList.add('splitter-bar', 'horz', 'bottom');
 		}
 		this.enabled = true;
-		this._tracker = new MouseTracker(this._elm, this).onDragUpdate((dragevent, info: ISvgDragUpdate) => {
+		this._tracker = new MouseTracker(this._elm, this).onDragUpdate((dragevent, info: IDragUpdate) => {
 			if (dragevent === 'begin' || dragevent === 'end') {
 				fn(dragevent, info);
 			}

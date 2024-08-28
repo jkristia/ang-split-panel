@@ -1,5 +1,5 @@
-export type ISvgDragEvent = 'begin' | 'update' | 'end';
-export interface ISvgDragUpdate {
+export type IDragEvent = 'begin' | 'update' | 'end';
+export interface IDragUpdate {
 	elm: SVGElement | HTMLElement | null;
 	trackX?: boolean;
 	trackY?: boolean;
@@ -16,7 +16,7 @@ export class MouseTracker {
 	static primaryButton = 1;
 	static secondaryButton = 2;
 
-	protected _dragInfo: ISvgDragUpdate = {
+	protected _dragInfo: IDragUpdate = {
 		elm: null,
 		initialX: 0,
 		initialY: 0,
@@ -27,10 +27,10 @@ export class MouseTracker {
 	};
 	private _isTracking = false;
 
-	private _onDragInfoFn: (ev: ISvgDragEvent, info: ISvgDragUpdate) => void = (ev, info) => {
+	private _onDragInfoFn: (ev: IDragEvent, info: IDragUpdate) => void = (ev, info) => {
 		console.log(`drag info ${this._elm.id} `, ev, info);
 	};
-	public onDragUpdate(fn: (ev: ISvgDragEvent, info: ISvgDragUpdate) => void): MouseTracker {
+	public onDragUpdate(fn: (ev: IDragEvent, info: IDragUpdate) => void): MouseTracker {
 		this._onDragInfoFn = fn;
 		return this;
 	}
