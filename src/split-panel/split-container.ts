@@ -7,7 +7,7 @@ import {
 	AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, Input, NgModule,
 	OnDestroy, OnInit, Output, QueryList
 } from "@angular/core";
-import { SizeItem, DistributedSize, SizeOptions, SplitValues } from "./distributed.size";
+import { SizeItem, DistributedSize, SizeOptions, SplitValues, ItemSplitValue } from "./distributed.size";
 import { SplitterBar, SplitterPosition } from "./splitter-bar";
 import { IDragEvent, IDragUpdate } from "./mouse-tracker";
 
@@ -37,6 +37,9 @@ export class SplitPanel implements OnInit {
 	}
 	ngOnInit(): void {
 		this._size = new SizeItem(this.options)
+	}
+	public setSavedSize(size: ItemSplitValue) {
+		this.size.setSavedSize(size);
 	}
 
 	public attachSplitter(fn: (dragEvent: IDragEvent, info: IDragUpdate) => void) {
@@ -150,6 +153,16 @@ export class SplitContainer implements OnInit, AfterViewInit, OnDestroy {
 	}
 	ngOnDestroy(): void {
 		this._resize?.disconnect();
+	}
+	public setSavedSize(size?: SplitValues) {
+		if (!size) {
+			return;
+		}
+		const panels = this._panels?.toArray() || [];
+		if (panels.length !== size.items.length) {
+			return;
+		}
+		panels.forEach( (p, i) => p.setSavedSize(size.items[i]))
 	}
 
 	private handleSizeChange(width: number, height: number) {

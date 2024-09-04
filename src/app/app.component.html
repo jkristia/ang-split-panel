@@ -1,5 +1,5 @@
 <ng-template #layout01Template>
-	<split-container (dragEnd)="onDragEnd('1', $event)">
+	<split-container #split1 (dragEnd)="onDragEnd('split1', $event)">
 
 		<split-panel [options]="{ size: 200, minSize: 100, canDrag: true }">
 			<div class="panel border-right">Panel #1</div>
@@ -7,7 +7,7 @@
 
 		<split-panel [options]="{ ratio: 2, minSize: 200, canDrag: true }">
 			<div class="column border-right">
-				<split-container [options]="{ direction: 'horizontal' }" (dragEnd)="onDragEnd('2', $event)">
+				<split-container #split2 [options]="{ direction: 'horizontal' }" (dragEnd)="onDragEnd('split2', $event)">
 					<split-panel [options]="{ size: 200, minSize: 100, canDrag: true }">
 						<div class="panel border-bottom">Panel #2</div>
 					</split-panel>

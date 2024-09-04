@@ -120,6 +120,17 @@ export class SizeItem {
 
 		// })
 	}
+	public setSavedSize(size: ItemSplitValue) {
+		if (this.options.type !== size.type) {
+			return;
+		}
+		if (this.options.type === 'fixed' && size.size) {
+			this.setIdealSize(size.size)
+		}
+		if (this.options.type === 'dynamic' && size.ratio) {
+			this.options.ratio = size.ratio;
+		}
+	}
 }
 
 /*
