@@ -192,7 +192,7 @@ describe('calculate size', () => {
 		const width = 500;
 		size.calculate(width);
 		// all items equal width
-		size.items.forEach( i => expect(i.size).toBe(100));
+		size.items.forEach(i => expect(i.size).toBe(100));
 		const dragItem = size.items[1]
 		let avail = size.maxAvailableSizeForItem(dragItem, width);
 		dragItem.setSizeFromDrag(90, avail, size.items);
@@ -220,26 +220,52 @@ describe('calculate size', () => {
 		size.calculate(400);
 		expect(size.splitValues).toEqual({
 			items: [
-				{ type: 'fixed', size: 100},
-				{ type: 'dynamic', ratio: 0.1},
-				{ type: 'dynamic', ratio: 0.1},
+				{ type: 'fixed', size: 100 },
+				{ type: 'dynamic', ratio: 0.1 },
+				{ type: 'dynamic', ratio: 0.1 },
 			]
 		})
 		size.calculate(153);
 		expect(size.splitValues).toEqual({
 			items: [
-				{ type: 'fixed', size: 53},
-				{ type: 'dynamic', ratio: 0.1},
-				{ type: 'dynamic', ratio: 0.1},
+				{ type: 'fixed', size: 53 },
+				{ type: 'dynamic', ratio: 0.1 },
+				{ type: 'dynamic', ratio: 0.1 },
 			]
 		})
 		size.items[1].setSizeFromDrag(200, 300, size.items)
 		expect(size.splitValues).toEqual({
 			items: [
-				{ type: 'fixed', size: 53},
-				{ type: 'dynamic', ratio: 2},
-				{ type: 'dynamic', ratio: 0.5},
+				{ type: 'fixed', size: 53 },
+				{ type: 'dynamic', ratio: 2 },
+				{ type: 'dynamic', ratio: 0.5 },
 			]
 		})
-		})
+	})
+	it('max size', () => {
+		const size = new DistributedSize().setItems([
+			new SizeItem({ type: 'fixed', size: 100, minSize: 50, maxSize: 200 }),
+			new SizeItem({ type: 'dynamic', minSize: 50 }),
+			new SizeItem({ type: 'dynamic', minSize: 50 }),
+		]);
+		const width = 400;
+		const item = size.items[0];
+		size.calculate(400);
+		let avail = size.maxAvailableSizeForItem(item, width);
+		item.setSizeFromDrag(150, avail);
+		size.calculate(width);
+		expect(size.items[0].size).toBe(150);
+		expect(size.items[1].size).toBe(125);
+		expect(size.items[2].size).toBe(125);
+		expect(size.totalAllocatedSize).toBe(400);
+
+		avail = size.maxAvailableSizeForItem(item, width);
+		item.setSizeFromDrag(300, avail);
+		size.calculate(width);
+		expect(size.items[0].size).toBe(200);
+		expect(size.items[1].size).toBe(100);
+		expect(size.items[2].size).toBe(100);
+		expect(size.totalAllocatedSize).toBe(400);
+
+	})
 })

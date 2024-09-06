@@ -17,6 +17,7 @@ export interface SizeOptions {
 	ratio?: number; 	// the ratio to which to split the remaining width across dynamic items
 	size?: number;		// size for fixed sized panels
 	minSize?: number;	// minSize, idealSize will be set to this, actual width depends on 'squeeze' method
+	maxSize?: number;
 	canDrag?: boolean;	// enable splitter 
 }
 
@@ -46,6 +47,9 @@ export class SizeItem {
 			return this.options.minSize;
 		}
 		return 0;
+	}
+	public get maxSize(): number | undefined {
+		return this.options.maxSize;
 	}
 	public get setting(): ItemSplitValue {
 		const result: ItemSplitValue = {
@@ -83,10 +87,16 @@ export class SizeItem {
 			return;
 		}
 		newSize = Math.min(newSize, maxAvailableSize);
+		if (this.maxSize && newSize > this.maxSize) {
+			newSize = this.maxSize;
+		}
 		this._sizeFromDrag = Math.max(this.minSize, newSize);
 	}
 	public setIdealSize(size: number): SizeItem {
 		this._idealSize = Math.max(this.minSize, size);
+		if (this.maxSize && this._idealSize > this.maxSize) {
+			this._idealSize = this.maxSize;
+		}
 		return this;
 	}
 	private handleDynamicSizeFromDrag(newSize: number, allItems?: SizeItem[]) {
